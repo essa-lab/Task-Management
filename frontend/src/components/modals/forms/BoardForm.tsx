@@ -120,6 +120,7 @@ const BoardForm: React.FC<BoardFormProps> = ({
             <div className="columns-list">
               {columns.map((col, idx) => (
                 <div key={idx} className="column-input-wrapper">
+                  
                   <input
                     type="text"
                     className={`column-input ${
@@ -131,6 +132,9 @@ const BoardForm: React.FC<BoardFormProps> = ({
                       updateColumn(idx, { ...col, title: e.target.value })
                     }
                   />
+                  {errors.columns?.[idx] && (
+    <span className="error-inside">{errors.columns[idx]}</span>
+  )}
                   <button
                     type="button"
                     onClick={() => removeColumn(idx)}

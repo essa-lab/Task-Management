@@ -39,7 +39,6 @@ const TaskForm: React.FC<TaskFormProps> = ({
       newErrors.name = "Task Title is required.";
     }
 
-    if (mode === "add") {
       const subError: string[] = [];
 
       subtasks.forEach((sub, idx) => {
@@ -51,7 +50,6 @@ const TaskForm: React.FC<TaskFormProps> = ({
       if (subError.length > 0) {
         newErrors.subTasks = subError;
       }
-    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -136,7 +134,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-        {errors.name && <p className="error-message">{errors.name}</p>}
+        {errors.name && <p className="error-message">*{errors.name}</p>}
 
         <label>Task Description</label>
 
@@ -147,7 +145,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
           placeholder="e.g. describe your sub task"
           className="textarea"
         />
-        {errors.name && <p className="error-message">{errors.name}</p>}
+        {errors.name && <p className="error-message">*{errors.name}</p>}
 
         {
           <>
@@ -156,20 +154,17 @@ const TaskForm: React.FC<TaskFormProps> = ({
               {subtasks.map((sub, idx) => (
                 <div key={idx} className="column-input-wrapper">
                   <input
-                    type="text"
-                    className={`column-input ${
-                      errors.subTasks && errors.subTasks[idx]
-                        ? "input-error"
-                        : ""
-                    }`}
-                    value={sub.title}
-                    placeholder={
-                      errors.subTasks?.[idx] || "Enter Sub Task Title"
-                    }
-                    onChange={(e) =>
-                      updateSubTasks(idx, { ...sub, title: e.target.value })
-                    }
-                  />
+    type="text"
+    className={`column-input ${errors.subTasks && errors.subTasks[idx] ? "input-error" : ""}`}
+    value={sub.title}
+    placeholder="Enter Sub Task Title"
+    onChange={(e) =>
+      updateSubTasks(idx, { ...sub, title: e.target.value })
+    }
+  />
+  {errors.subTasks?.[idx] && (
+    <span className="error-inside">{errors.subTasks[idx]}</span>
+  )}
                   <button
                     type="button"
                     onClick={() => removeSubtask(idx)}

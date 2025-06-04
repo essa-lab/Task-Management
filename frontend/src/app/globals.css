@@ -29,6 +29,21 @@
   --dark-color-purple-800: #332f53; 
   --dark-color-purple-100: #332f53; 
 }
+.error-inside {
+  position: absolute;
+  /* right: 0.5rem;
+  top: 50%; */
+  transform: translateY(-50%) translateX(200%);
+    /* transform: ; */
+
+  font-size: 0.8rem;
+  color: red;
+  pointer-events: none;
+  white-space: nowrap;
+  max-width: 9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .checkbox-wrapper {
   display: inline-flex;
   align-items: center;
@@ -229,11 +244,9 @@ body {
 .column-input.input-error {
   border: 1px solid red!important;
   background-color: #ffe6e6;
-  color: #a00!important;
+  /* color: #a00!important; */
 }
-.column-input.input-error::placeholder {
-  color: red!important; /* placeholder color when there's an error */
-}
+
 .remove-column-btn {
   margin-left: 8px;
   background: none;
