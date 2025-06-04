@@ -82,26 +82,17 @@ const Header: React.FC<HeaderProps> = ({
   // Handle Board Delete
   const deleteMutation = useMutation({
     mutationFn: deleteBoard,
-    onSuccess: (response) => {
+    onSuccess: async (response) => {
       toast.success("Board Deleted Successfuly!");
       setModalOpen(false);
-      //TO-DO : Make this work (After deletion make the first Board Active)
-      // setBoard(response.data)
+      await queryClient.invalidateQueries({ queryKey: ["boards"] });
+      setBoard(response.data)
     },
   });
   const submitDelete = async () => {
     deleteMutation.mutate(board.id);
 
-    //Alternative for TO-Do
-    const boards = await queryClient.fetchQuery({
-      queryKey: ["boards"],
-      queryFn: fetchBoards,
-
-    });
-
-    if (boards.data.length > 0) {
-      setBoard(boards.data[0]);
-    }
+    
   };
 
   const handleDelete = async () => {
