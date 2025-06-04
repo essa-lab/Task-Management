@@ -70,7 +70,7 @@ export class BoardService {
 }
 
    async updateBoard(id: number, data: { title: string; columns: { id?: number; title: string }[] }): Promise<any> {
-  const existingBoard = await this.prisma.boards.findUnique({
+  const existingBoard = await this.prisma.boards.findUniqueOrThrow({
     where: { id },
     include: { columns: true },
   });

@@ -4,10 +4,11 @@ import { TaskService } from './tasks.service';
 import { TaskController } from './tasks.controller';
 import { SubTaskModule } from './sub_tasks/sub_tasks.module';
 import { ColumnExist } from 'src/common/validator/column_exist.validator';
+import { TaskExist } from 'src/common/validator/task_exist.validator';
 
 @Module({
   imports:[SubTaskModule],
   controllers: [TaskController],
-  providers: [ PrismaService,TaskService,ColumnExist],
+  providers: [ PrismaService,TaskService,ColumnExist,TaskExist],
 })
 export class TaskModule {}
