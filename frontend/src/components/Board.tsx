@@ -6,6 +6,7 @@ import { useBoard } from "@/context/BoardContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ColumnForm from "./modals/forms/ColumnForm";
 import { addColumn } from "@/api/board.api";
+import toast from "react-hot-toast";
 
 interface BoardProps {
   columns: Column[] | undefined;
@@ -23,7 +24,6 @@ const Board: React.FC<BoardProps> = ({ columns }) => {
       id: col.id,
       title: col.title,
     })) || [];
-    
 
   // Handle Add Column
   const handleAddColumn = () => {
@@ -33,8 +33,21 @@ const Board: React.FC<BoardProps> = ({ columns }) => {
   const columnFormMutation = useMutation({
     mutationFn: addColumn,
     onSuccess: (response) => {
+      toast.success("Column Added Successfully");
+
       queryClient.invalidateQueries({ queryKey: ["ActiveBoard"] });
       setColumnFormOpen(false);
+    },
+    onError: (error) => {
+      console.log(error);
+      const message = error?.response?.data?.message;
+      if (Array.isArray(message)) {
+        message.forEach((msg) => toast.error(msg));
+      } else if (typeof message === "string") {
+        toast.error(message);
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
     },
   });
 
@@ -44,7 +57,7 @@ const Board: React.FC<BoardProps> = ({ columns }) => {
       data,
     });
   };
-  // End Add Column 
+  // End Add Column
 
   return (
     <div className="board-container">
@@ -98,9 +111,9 @@ const Board: React.FC<BoardProps> = ({ columns }) => {
               </div>
             </div>
           ))}
-          <div className="add-column-placeholder">
+          <div               onClick={handleAddColumn}
+ className="add-column-placeholder">
             <button
-              onClick={handleAddColumn}
               className="add-column-placeholder-button"
             >
               + New Column

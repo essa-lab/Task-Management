@@ -2,11 +2,13 @@ import api from './axios';
 import { Column } from '../app/types';
 
 export const fetchBoards = async () => {
+
   const { data } = await api.get('/boards');
   return data;
 };
 
 export const fetchBoardData = async (boardId: number = 1) => {
+
   const { data } = await api.get(`/boards/${boardId}`);
   return data;
 };

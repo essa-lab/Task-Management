@@ -10,6 +10,7 @@ import {
   toggleSubtaskStatus,
   updateTaskStatus,
 } from "@/api/task.api";
+import toast from "react-hot-toast";
 interface TaskModalProb {
   isOpen: boolean;
   onClose: () => void;
@@ -79,9 +80,21 @@ const TaskModal: React.FC<TaskModalProb> = ({
   const deleteMutation = useMutation({
     mutationFn: deleteTask,
     onSuccess: () => {
+          toast.success("Task Deleted!");
+
       queryClient.invalidateQueries({ queryKey: ["ActiveBoard"] });
       onClose();
     },
+    onError: (error) => {
+  const message = error?.response?.data?.message;
+
+  if (Array.isArray(message)) {
+    message.forEach((msg) => toast.error(msg));
+  } else if (typeof message === "string") {
+    toast.error(message);
+  } else {
+    toast.error("An unexpected error occurred.");
+  }  },
   });
 
   const submitDelete = async () => {
@@ -109,9 +122,23 @@ const TaskModal: React.FC<TaskModalProb> = ({
   const updateMutation = useMutation({
     mutationFn: updateTask,
     onSuccess: (response) => {
+          toast.success("Task Updated");
+
       queryClient.invalidateQueries({ queryKey: ["ActiveBoard"] });
       setTaskModalOpen(false);
+            onClose();
+
     },
+    onError: (error) => {
+  const message = error?.response?.data?.message;
+
+  if (Array.isArray(message)) {
+    message.forEach((msg) => toast.error(msg));
+  } else if (typeof message === "string") {
+    toast.error(message);
+  } else {
+    toast.error("An unexpected error occurred.");
+  }  },
   });
 
   const handleUpdateTaskRequest = (data: {
@@ -144,7 +171,7 @@ const TaskModal: React.FC<TaskModalProb> = ({
         <div className="dropdown-task">
           <button className="dropdown-task-toggle">⋮</button>
           <div className="dropdown-menu-task">
-            <button onClick={handleUpdateTask}>Edit Task</button>
+            <button className="edit" onClick={handleUpdateTask}>Edit Task</button>
             <button className="delete" onClick={handleDelete}>
               Delete Task
             </button>
@@ -160,13 +187,14 @@ const TaskModal: React.FC<TaskModalProb> = ({
             {initialData?.tasks?.length || 0} subtasks completed
           </p>
           {initialData?.tasks?.map((subtask, index) => (
-            <label key={index}>
+            <label key={index} className="checkbox-wrapper">
               <input
+                className="custom-checkbox"
                 type="checkbox"
                 checked={subtask.is_done}
                 onChange={() => handleSubtaskToggle(index)}
               />
-              {subtask.title}
+              <span className="checkbox-label">{subtask.title}</span>
             </label>
           ))}
         </div>

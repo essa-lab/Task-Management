@@ -7,6 +7,7 @@ import { Column, SubTasks } from "@/app/types";
 import TaskForm from "./modals/forms/TaskForm";
 import { deleteBoard, updateBoard, fetchBoards } from "@/api/board.api";
 import { addTask } from "@/api/task.api";
+import toast from "react-hot-toast";
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -29,7 +30,9 @@ const Header: React.FC<HeaderProps> = ({
   const [mode, setMode] = React.useState<"add" | "edit">("edit");
   const [editingItem, setEditingItem] = React.useState<any>();
   const [isTaskModalOpen, setTaskModalOpen] = React.useState(false);
-  const [taskModalMode, setTaskModalMode] = React.useState<"add" | "edit">("edit");
+  const [taskModalMode, setTaskModalMode] = React.useState<"add" | "edit">(
+    "edit"
+  );
 
   const queryClient = useQueryClient();
 
@@ -47,9 +50,24 @@ const Header: React.FC<HeaderProps> = ({
   const updateMutation = useMutation({
     mutationFn: updateBoard,
     onSuccess: (response) => {
-      queryClient.invalidateQueries({ queryKey: ["boards"] });
+
+      queryClient.invalidateQueries({ queryKey: ["ActiveBoard"] });
+
+      toast.success("Board Updated Successfuly!");
+      console.log(response)
       setBoard(response.data);
       setModalOpen(false);
+    },
+    onError: (error) => {
+      const message = error?.response?.data?.message;
+
+      if (Array.isArray(message)) {
+        message.forEach((msg) => toast.error(msg));
+      } else if (typeof message === "string") {
+        toast.error(message);
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
     },
   });
   const handleSubmit = (data: { title: string; column: Column[] }) => {
@@ -57,6 +75,7 @@ const Header: React.FC<HeaderProps> = ({
       boardId: board.id,
       data,
     });
+
   };
   // End Handle Edit Board
 
@@ -64,10 +83,9 @@ const Header: React.FC<HeaderProps> = ({
   const deleteMutation = useMutation({
     mutationFn: deleteBoard,
     onSuccess: (response) => {
-
+      toast.success("Board Deleted Successfuly!");
       setModalOpen(false);
-
-       //TO-DO : Make this work (After deletion make the first Board Active)
+      //TO-DO : Make this work (After deletion make the first Board Active)
       // setBoard(response.data)
     },
   });
@@ -78,6 +96,7 @@ const Header: React.FC<HeaderProps> = ({
     const boards = await queryClient.fetchQuery({
       queryKey: ["boards"],
       queryFn: fetchBoards,
+
     });
 
     if (boards.data.length > 0) {
@@ -107,11 +126,22 @@ const Header: React.FC<HeaderProps> = ({
   const taskMutation = useMutation({
     mutationFn: addTask,
     onSuccess: (response) => {
+            toast.success("Task Added Successfuly!");
+
       queryClient.invalidateQueries({ queryKey: ["ActiveBoard"] });
       setTaskModalOpen(false);
     },
+    onError: (error) => {
+      const message = error?.response?.data?.message;
 
-
+      if (Array.isArray(message)) {
+        message.forEach((msg) => toast.error(msg));
+      } else if (typeof message === "string") {
+        toast.error(message);
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
+    },
   });
 
   const handleAddTaskRequest = (data: {
@@ -126,9 +156,10 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="header">
-      <h1 className="header-board-name">
-        {/* Kanban logo SVG (only visible on mobile when sidebar is closed) */}
-        {isMobile && !isSidebarOpen && (
+      
+      <div className="header-logo-title">
+      {!isSidebarOpen && (
+        <h1>
           <svg
             width="24"
             height="24"
@@ -141,15 +172,16 @@ const Header: React.FC<HeaderProps> = ({
             <rect x="8" y="12" width="8" height="12" rx="4" fill="#635FC7" />
             <rect x="16" y="4" width="8" height="20" rx="4" fill="#635FC7" />
           </svg>
+          Kanban
+          </h1>
         )}
+
+      <h1 className="header-board-name">
+
         {board.title}
 
-        {/* {isMobile && (
-           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="header-dropdown-icon">
-             <path d="M8 12L2 6H14L8 12Z" fill="currentColor"/>
-           </svg>
-        )} */}
       </h1>
+      </div>
       <div className="header-actions">
         <button className="add-task-button" onClick={handleAddTask}>
           <svg
@@ -168,7 +200,7 @@ const Header: React.FC<HeaderProps> = ({
 
           <span className="add-task-text-desktop">Add New Task</span>
 
-          <span className="add-task-text-mobile">+</span>
+          {/* <span className="add-task-text-mobile">+</span> */}
         </button>
         <div className="dropdown-wrapper">
           <button className="header-options-button" onClick={toggleDropdown}>

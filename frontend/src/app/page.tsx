@@ -17,9 +17,51 @@ export default function Page() {
   staleTime: 1000 * 60 * 5,
 });
   
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading data</div>;
+  if (isLoading) {
+    return (
+      <main className="board-main-area">
+        <div className="board-container">
+      
+        <>
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="board-column">
+              <h3 className="column-heading">
+              </h3>
+              <div className="task-list">
+                {[...Array(5)].map((_, i) => (
+                  //onClick={setModalOpen}
+                  <div
+                    key={i}
+                    className="task-card-skeleton"
+                  >
+                    <h4 className="task-title"></h4>
+                    <p className="task-subtasks">
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
 
+        </>
+      
+
+    </div>
+        
+      </main>
+    );
+  }
+
+  if (isError) {
+    return (
+      <main className="board-main-area">
+        <div className="error-message">
+          <h2>Something went wrong.</h2>
+          <p>We couldn’t load your board. Please try again later.</p>
+        </div>
+      </main>
+    );
+  }
   return (
     <main className="board-main-area">
       {board ? (

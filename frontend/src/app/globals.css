@@ -29,7 +29,62 @@
   --dark-color-purple-800: #332f53; 
   --dark-color-purple-100: #332f53; 
 }
+.checkbox-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  background-color:var(--color-purple-100)!important; 
 
+}
+.checkbox-wrapper:hover {
+  
+  background-color:var(--color-purple-700)!important; 
+
+}
+.dark-mode .checkbox-wrapper{
+      background-color:var(--color-gray-700)!important; 
+
+}
+.dark-mode .checkbox-wrapper:hover {
+  
+  background-color:var(--color-purple-600)!important; 
+
+}
+.custom-checkbox {
+  width: 16px;
+  height: 16px;
+    accent-color: var(--color-purple-700); /* For most modern browsers */
+
+}
+.custom-checkbox:checked + .checkbox-label {
+  text-decoration: line-through;
+  color: var(--color-gray-900);
+}
+.checkbox-label{
+  color: var(--color-gray-900);
+}
+.dark-mode .checkbox-label{
+  color: var(--color-gray-300);
+}
+.dark-mode .custom-checkbox:checked + .checkbox-label {
+  text-decoration: line-through;
+  color: var(--color-white);
+}
+
+.task-card-skeleton{
+  background-color: var(--color-white);
+  padding: 1rem; /* p-4 */
+  border-radius: 0.5rem; /* rounded-lg */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+  transition: box-shadow 0.2s ease;
+  height: 100px;
+
+}
+.dark-mode .task-card-skeleton{
+    background-color: var(--dark-color-gray-300);
+
+}
 /* Base styles for light mode */
 body {
   margin: 0;
@@ -67,16 +122,26 @@ body {
 }
 }
 
+.content-scrollable {
+  flex-grow: 1;
+  overflow-y: auto;
+  
+}
+
 .main-content {
+  overflow: hidden;
   flex: 1;
   display: flex;
+    height: 100vh; 
+
   flex-direction: column;
   transition: margin-left 0.3s ease;
-  margin-left: 0; /* Default for mobile/sidebar closed */
+  margin-left: 0;
 }
 
 
 .board-main-area {
+  height: 100%;
   flex: 1;
   background-color: var(--color-gray-100);
   overflow-y: auto;
@@ -399,8 +464,9 @@ body {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: var(--text);
+  color: var(--color-gray-500);
 }
+
 
 .dropdown-menu-task {
   position: absolute;
@@ -408,13 +474,17 @@ body {
   left: 0;
   min-width: 150px;
   /* margin-top: 0.5rem; */
-  background-color: var(--dropdown-bg);
+  background-color: var(--color-white);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   padding: 0.5rem 0;
   display: none; /* hide by default */
   flex-direction: column;
   z-index: 100;
+}
+.dark-mode .dropdown-menu-task{
+    background-color: var(--dark-color-gray-700);
+
 }
 
 /* 👇 show menu when hovering the parent */
@@ -439,6 +509,12 @@ body {
 
 .dropdown-menu-task .delete {
   color: #ea5555;
+}
+.dropdown-menu-task .edit {
+  color: black;
+}
+.dark-mode .dropdown-menu-task .edit {
+  color: var(--color-gray-100);
 }
 
 .dropdown-menu-task .delete:hover {
@@ -506,13 +582,16 @@ body {
 
 
 .board-container {
+  height: 94%;
   display: flex;
   flex-grow: 1;
   overflow-x: auto;
   padding: 1.5rem; /* p-6 */
   gap: 1.5rem; /* space-x-6 */
 }
-
+.header-logo-title{
+  display: flex;
+}
 .empty-board-message {
   display: flex;
   flex-direction: column;
@@ -638,7 +717,7 @@ body {
 .add-column-placeholder {
   width: 288px; /* w-72 */
   flex-shrink: 0;
-  background-color: var(--color-gray-100);
+  background-color: var(--color-gray-300);
   border-radius: 0.5rem; /* rounded-lg */
   display: flex;
   align-items: center;
@@ -652,7 +731,7 @@ body {
 }
 
 .add-column-placeholder:hover {
-  background-color: var(--color-gray-300);
+  background-color: var(--color-gray-600);
 }
 
 .dark-mode .add-column-placeholder:hover {
@@ -761,11 +840,12 @@ body {
 }
 
 .header-board-name {
-  font-size: 1.25rem; /* text-xl */
+  font-size: 1.50rem; /* text-xl */
   font-weight: bold;
   color: var(--color-gray-900);
   display: flex;
   align-items: center;
+  margin-left:8px
 }
 
 .dark-mode .header-board-name {
@@ -897,7 +977,7 @@ body {
 }
 
 .sidebar-logo {
-  font-size: 1.5rem; /* text-2xl */
+  font-size: 1.50rem; /* text-2xl */
   font-weight: bold;
   color: var(--color-gray-900);
   display: flex;

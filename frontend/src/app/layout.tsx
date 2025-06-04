@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import "./globals.css";
 import { BoardProvider } from "@/context/BoardContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -94,9 +95,12 @@ export default function RootLayout({
                   isSidebarOpen={isSidebarOpen}
                   isMobile={isMobile}
                 />
+      <Toaster position="top-right" />
 
                 {/* Board content */}
+                <div className="content-scrollable">
                 {children}
+                </div>
               </div>
 
               {/* Show Sidebar button for mobile when sidebar is hidden */}
