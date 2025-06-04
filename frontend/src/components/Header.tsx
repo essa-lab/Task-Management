@@ -8,6 +8,7 @@ import TaskForm from "./modals/forms/TaskForm";
 import { deleteBoard, updateBoard, fetchBoards } from "@/api/board.api";
 import { addTask } from "@/api/task.api";
 import toast from "react-hot-toast";
+import { onError } from "@/utils/error-toast";
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -59,15 +60,8 @@ const Header: React.FC<HeaderProps> = ({
       setModalOpen(false);
     },
     onError: (error) => {
-      const message = error?.response?.data?.message;
-
-      if (Array.isArray(message)) {
-        message.forEach((msg) => toast.error(msg));
-      } else if (typeof message === "string") {
-        toast.error(message);
-      } else {
-        toast.error("An unexpected error occurred.");
-      }
+            onError(error)
+      
     },
   });
   const handleSubmit = (data: { title: string; column: Column[] }) => {
@@ -123,15 +117,8 @@ const Header: React.FC<HeaderProps> = ({
       setTaskModalOpen(false);
     },
     onError: (error) => {
-      const message = error?.response?.data?.message;
-
-      if (Array.isArray(message)) {
-        message.forEach((msg) => toast.error(msg));
-      } else if (typeof message === "string") {
-        toast.error(message);
-      } else {
-        toast.error("An unexpected error occurred.");
-      }
+            onError(error)
+      
     },
   });
 

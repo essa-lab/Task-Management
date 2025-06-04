@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ColumnForm from "./modals/forms/ColumnForm";
 import { addColumn } from "@/api/board.api";
 import toast from "react-hot-toast";
+import { onError } from "@/utils/error-toast";
 
 interface BoardProps {
   columns: Column[] | undefined;
@@ -39,15 +40,7 @@ const Board: React.FC<BoardProps> = ({ columns }) => {
       setColumnFormOpen(false);
     },
     onError: (error) => {
-      console.log(error);
-      const message = error?.response?.data?.message;
-      if (Array.isArray(message)) {
-        message.forEach((msg) => toast.error(msg));
-      } else if (typeof message === "string") {
-        toast.error(message);
-      } else {
-        toast.error("An unexpected error occurred.");
-      }
+      onError(error)
     },
   });
 

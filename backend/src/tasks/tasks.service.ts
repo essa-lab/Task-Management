@@ -43,10 +43,7 @@ export class TaskService {
       if (!existingTask) throw new Error('Task not found');
     
       const existingTasks = existingTask.tasks;
-    
-      // Map existing columns by ID
-      const existingTaskMap = new Map(existingTasks.map(sub => [sub.id, sub]));
-    
+
       // Incoming columns split by type
       const incomingSubTasksWithId = data.sub_tasks.filter(sub => sub.id);       // Update
       const incomingSubTasksWithoutId = data.sub_tasks.filter(sub => !sub.id);   // Create
@@ -54,6 +51,7 @@ export class TaskService {
       const incomingIds = new Set(incomingSubTasksWithId?.map(sub => sub.id));
       const SubTasksToDelete = existingTasks.filter(sub => !incomingIds.has(sub.id));
     
+      
       const operations: Prisma.PrismaPromise<any>[] = [];
     
       // Update task title

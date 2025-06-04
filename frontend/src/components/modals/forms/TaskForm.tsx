@@ -27,7 +27,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
   const [name, setName] = useState("");
   const [subtasks, setSubTasks] = useState<SubTasks[]>([]);
   const [description, setDescription] = useState("");
-  const [statusID, setStatusID] = useState<number>(0);
+  const [statusID, setStatusID] = useState<number|undefined>(0);
   const [errors, setErrors] = React.useState<{
     name?: string;
     subTasks?: string[];
@@ -86,6 +86,8 @@ const TaskForm: React.FC<TaskFormProps> = ({
       setName("");
       setSubTasks([]);
       setDescription("");
+      setStatusID(column[0]?.id);
+
     }
   }, [isOpen, mode, initialData]);
 
@@ -106,7 +108,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
 
     onSubmit({
       description: description,
-      status_id: statusID,
+      status_id: statusID??0,
       title: name,
       subTasks: subtasks,
     });
@@ -115,6 +117,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
   const handleStatusChange = async (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
+    console.log(e.target.value)
     const newStatus = Number(e.target.value);
     setStatusID(newStatus);
   };

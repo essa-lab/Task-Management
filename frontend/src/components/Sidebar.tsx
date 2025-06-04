@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import BoardForm from "./modals/forms/BoardForm";
 import { fetchBoards, createBoard } from "@/api/board.api";
 import toast from "react-hot-toast";
+import { onError } from "@/utils/error-toast";
 interface SidebarProps {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
@@ -32,15 +33,8 @@ const Sidebar: React.FC<SidebarProps> = ({
       setModalOpen(false);
     },
     onError: (error) => {
-      const message = error?.response?.data?.message;
-
-      if (Array.isArray(message)) {
-        message.forEach((msg) => toast.error(msg));
-      } else if (typeof message === "string") {
-        toast.error(message);
-      } else {
-        toast.error("An unexpected error occurred.");
-      }
+            onError(error)
+      
     },
   });
 
@@ -60,7 +54,6 @@ const Sidebar: React.FC<SidebarProps> = ({
       setBoard(data.data[0]);
     }
   }, [data, board, setBoard]);
-  //Is Error Is Loading Implementation
 
   if (isError) {
     <div>Something went wrong</div>;

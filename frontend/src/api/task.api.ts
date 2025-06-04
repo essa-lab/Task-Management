@@ -23,7 +23,7 @@ export const updateTask = async ({
   taskId: number;
   data: {
     description: string;
-    status_id: number;
+    status_id: number|undefined;
     title: string;
     subTasks: SubTasks[];
   };

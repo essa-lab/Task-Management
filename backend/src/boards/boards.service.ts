@@ -79,9 +79,6 @@ export class BoardService {
 
   const existingColumns = existingBoard.columns;
 
-  // Map existing columns by ID
-  const existingColumnMap = new Map(existingColumns.map(col => [col.id, col]));
-
   // Incoming columns split by type
   const incomingColumnsWithId = data.columns.filter(col => col.id);       // Update
   const incomingColumnsWithoutId = data.columns.filter(col => !col.id);   // Create
